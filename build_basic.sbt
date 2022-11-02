@@ -1,7 +1,5 @@
 jsonFiles += (baseDirectory.value / "package.json")
 
-scalaVersion := "2.12.17"
-
 organization := jsonHandler.value.stringValue("package.json", "organization")
 
 name := jsonHandler.value.stringValue("package.json", "name")
