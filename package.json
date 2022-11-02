@@ -1,0 +1,28 @@
+{
+  "name": "quest4s",
+  "organization": "de.iwelt",
+  "version": "0.3.0.snapshot",
+  "description": "",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "docs:dev": "vitepress dev docs",
+    "docs:build": "vitepress build docs",
+    "docs:serve": "vitepress serve docs --port 5555"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/iWeltAG/quest4s.git"
+  },
+  "author": "info@mongocamp.dev",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/iWeltAG/quest4s/issues"
+  },
+  "homepage": "https://github.com/iWeltAG/quest4s#readme",
+  "devDependencies": {
+    "vitepress": "^1.0.0-alpha.2",
+    "@openapitools/openapi-generator-cli": "^2.4.26"
+  }
+}

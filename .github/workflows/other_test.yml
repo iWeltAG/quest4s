@@ -1,0 +1,25 @@
+name: Test Process
+
+on:
+  push:
+    branches-ignore:
+      - 'main'
+      - 'master'
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  unit-test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        java: [ '11', '17' ]
+    steps:
+      - uses: actions/checkout@v3.0.0
+      - name: Set up JDK ${{ matrix.Java }}
+        uses: actions/setup-java@v3.3.0
+        with:
+          distribution: 'corretto'
+          java-version: ${{ matrix.java }}
+      - name: Run tests
+        run: sbt test
