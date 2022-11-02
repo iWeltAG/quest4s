@@ -1,0 +1,13 @@
+:book-title: quest4s
+:revyear: 2022
+:business: iWelt GmbH + Co. KG
+
+= {book-title}
+(C) {revyear} {business}.
+
+== Changelog
+https://github.com/iWeltAG/quest4s/blob/main/CHANGELOG.md[CHANGELOG.md]
+
+== Documentation
+TBA
+

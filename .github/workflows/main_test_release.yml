@@ -1,0 +1,63 @@
+name: Build and Release Process
+
+on:
+  push:
+    branches:
+      - 'main'
+      - 'master'
+  repository_dispatch:
+    types: [build]
+
+jobs:
+  unit-test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        java: [ '11', '17' ]
+    steps:
+      - uses: actions/checkout@v3.0.0
+      - name: Set up JDK ${{ matrix.Java }}
+        uses: actions/setup-java@v3.3.0
+        with:
+          distribution: 'corretto'
+          java-version: ${{ matrix.java }}
+      - name: Run tests
+        run:  sbt test
+  release:
+    needs:
+      - unit-test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Git Checkout
+        uses: actions/checkout@v3.0.0
+        with:
+          fetch-depth: 0
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2.2.1
+        with:
+          version: 6.0.2
+      - name: install conventional-changelog-cli
+        run: pnpm install -g conventional-changelog-cli
+      - name: install conventional-github-release
+        run: pnpm install -g conventional-github-releaser
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3.3.0
+        with:
+          distribution: 'corretto'
+          java-version: '17'
+      - id: install-secret-key
+        name: Install gpg secret key
+        run: cat <(echo -e "${{ secrets.PGP_SECRET_KEY }}") | gpg --batch --import
+      - name: Release
+        env:
+          CONVENTIONAL_GITHUB_RELEASER_TOKEN: ${{ secrets.GH_ADMIN_TOKEN }}
+          GITHUB_USER: ${{ secrets.GH_USERNAME }}
+          GITHUB_TOKEN: ${{ secrets.GH_ADMIN_TOKEN }}
+          SONATYPE_USER: ${{ secrets.SONATYPE_USER }}
+          SONATYPE_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
+          PGP_PASSPHRASE: ${{ secrets.PGP_PASSWORD }}
+          PGP_SECRET: ${{ secrets.PGP_SECRET_KEY }}
+        run: |
+          git config --global user.email "ci@iwelt.de"
+          git config --global user.name "iWelt CI"
+          sbt ci-release
