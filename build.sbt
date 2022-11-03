@@ -16,10 +16,15 @@ libraryDependencies += "io.circe"                      %% "circe-core"    % circ
 libraryDependencies += "io.circe"                      %% "circe-generic" % circeVersion
 libraryDependencies += "io.circe"                      %% "circe-parser"  % circeVersion
 
+libraryDependencies += "joda-time" % "joda-time" % "2.12.1"
+
+val AkkaVersion = "2.6.20" // 2.6.20 latest version under Apache 2.0
+
+libraryDependencies += "com.typesafe.akka" %% "akka-actor" % AkkaVersion % Provided
+
+libraryDependencies += "com.typesafe.akka" %% "akka-stream" % AkkaVersion % Test
+
 libraryDependencies += "com.softwaremill.sttp.client3" %% "akka-http-backend" % sttClientVersion % Test
+libraryDependencies += "com.softwaremill.sttp.client3" %% "okhttp-backend"    % sttClientVersion % Test
 
 libraryDependencies += "org.scalameta" %% "munit" % "0.7.29" % Test
-
-libraryDependencies += "joda-time" % "joda-time" % "2.12.1" % Provided
-
-libraryDependencies += "com.typesafe.akka" %% "akka-actor" % "2.6.20" % Provided // 2.6.20 latest version under Apache 2.0
