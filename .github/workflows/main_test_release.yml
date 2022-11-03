@@ -23,7 +23,7 @@ jobs:
           distribution: 'corretto'
           java-version: ${{ matrix.java }}
       - name: Start QuestDb ${{ matrix.mongodb-version }}
-        uses: QuadStingray/questdb-github-action@1.0.0
+        uses: QuadStingray/questdb-github-action@v1.0.0
         with:
           questdb-version: ${{ matrix.questdb-version }}
       - name: Run tests
