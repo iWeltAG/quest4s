@@ -1,8 +1,10 @@
 package de.iwelt.quest4s
 
 import better.files.File
-import de.iwelt.quest4s.exception.Quest4SParseException
+import de.iwelt.quest4s.converter.CirceSchema
+import de.iwelt.quest4s.exception.{Quest4SInvalidRequestException, Quest4SParseException}
 import de.iwelt.quest4s.util.UrlHelper
+import io.circe.Error
 import io.circe.generic.AutoDerivation
 import sttp.client3.circe.SttpCirceApi
 import sttp.client3.{SttpBackend, _}
@@ -15,9 +17,13 @@ import scala.concurrent.{Await, Future}
 case class QuestDbClient(host: String, backend: SttpBackend[Future, _], username: String = "", password: String = "")
     extends UrlHelper
     with SttpCirceApi
-    with AutoDerivation {
+    with AutoDerivation
+    with CirceSchema {
 
-  def executeSqlRequest(sql: String, additionalParameters: Map[String, Any] = Map()): RequestT[Identity, Either[String, Map[String, Any]], Any] = {
+  def executeSqlRequest(
+      sql: String,
+      additionalParameters: Map[String, Any] = Map()
+  ): RequestT[Identity, Either[sttp.client3.ResponseException[String, Error], Map[String, Any]], Any] = {
     val urlString = buildRequestUrl(s"$host/exec", additionalParameters ++ Map("query" -> sql))
     basicRequest
       .method(Method.GET, uri"$urlString")
@@ -26,7 +32,11 @@ case class QuestDbClient(host: String, backend: SttpBackend[Future, _], username
       .response(asJson[Map[String, Any]])
   }
 
-  def importCsvRequest(tableName: String, file: File, additionalParameters: Map[String, Any] = Map()): RequestT[Identity, Either[String, String], Any] = {
+  def importCsvRequest(
+      tableName: String,
+      file: File,
+      additionalParameters: Map[String, Any] = Map()
+  ): RequestT[Identity, Either[sttp.client3.ResponseException[String, Error], Map[String, Any]], Any] = {
     val urlString = buildRequestUrl(s"$host/imp", additionalParameters ++ Map("fmt" -> "json", "name" -> tableName))
     basicRequest
       .method(Method.PUT, uri"$urlString")
@@ -38,8 +48,7 @@ case class QuestDbClient(host: String, backend: SttpBackend[Future, _], username
           multipartFile("data", file.toJava)
         )
       )
-      .response(asString("UTF-8"))
-
+      .response(asJson[Map[String, Any]])
   }
 
   def exportCsvRequest(query: String, limit: Option[String] = None): RequestT[Identity, Either[String, io.File], Any] = {
@@ -54,19 +63,36 @@ case class QuestDbClient(host: String, backend: SttpBackend[Future, _], username
   def executeSql(sql: String, maxWaitDuration: Duration, additionalParameters: Map[String, Any] = Map()): Map[String, Any] = {
     val resultFuture   = backend.send(executeSqlRequest(sql, additionalParameters))
     val responseResult = Await.result(resultFuture, maxWaitDuration)
-    responseResult.body.getOrElse(throw new Quest4SParseException("could not parse body"))
+    responseResult.body.getOrElse(
+      if (responseResult.code.isSuccess) {
+        throw new Quest4SParseException("could not parse body")
+      }
+      else {
+        throw new Quest4SInvalidRequestException(responseResult.body.left.get)
+      }
+    )
   }
 
-  def importCsv(tableName: String, file: File, maxWaitDuration: Duration, additionalParameters: Map[String, Any] = Map()): String = {
+  def importCsv(tableName: String, file: File, maxWaitDuration: Duration, additionalParameters: Map[String, Any] = Map()): Map[String, Any] = {
+    // case class could not be used at this moment because server sometime turn "table response" instead of json https://github.com/questdb/questdb/issues/2703
     val resultFuture   = backend.send(importCsvRequest(tableName, file, additionalParameters))
     val responseResult = Await.result(resultFuture, maxWaitDuration)
-    responseResult.body.getOrElse(throw new Quest4SParseException("could not parse body"))
+    responseResult.body.getOrElse(
+      if (responseResult.code.isSuccess) {
+        Map()
+      }
+      else {
+        throw new Quest4SInvalidRequestException(responseResult.body.left.get)
+      }
+    )
   }
 
-  def exportCsvRequest(query: String, maxWaitDuration: Duration, limit: Option[String] = None): File = {
+  def exportCsv(query: String, maxWaitDuration: Duration, limit: Option[String] = None): File = {
     val resultFuture   = backend.send(exportCsvRequest(query, limit))
     val responseResult = Await.result(resultFuture, maxWaitDuration)
-    val javaFile       = responseResult.body.getOrElse(throw new Quest4SParseException("could not parse body"))
+    val javaFile = responseResult.body.getOrElse(
+      throw new Quest4SParseException("could not parse body")
+    )
     File(javaFile.toURI)
   }
 
