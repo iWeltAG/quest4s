@@ -14,6 +14,7 @@ jobs:
     strategy:
       matrix:
         java: [ '11', '17' ]
+        questdb-version: ['6.5', '6.4']
     steps:
       - uses: actions/checkout@v3.0.0
       - name: Set up JDK ${{ matrix.Java }}
@@ -21,8 +22,13 @@ jobs:
         with:
           distribution: 'corretto'
           java-version: ${{ matrix.java }}
+      - name: Start QuestDb ${{ matrix.mongodb-version }}
+        uses: QuadStingray/questdb-github-action@1.0.0
+        with:
+          questdb-version: ${{ matrix.questdb-version }}
       - name: Run tests
         run:  sbt test
+
   release:
     needs:
       - unit-test
