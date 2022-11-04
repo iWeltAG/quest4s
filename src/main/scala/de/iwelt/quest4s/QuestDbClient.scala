@@ -2,17 +2,17 @@ package de.iwelt.quest4s
 
 import better.files.File
 import de.iwelt.quest4s.converter.CirceSchema
-import de.iwelt.quest4s.exception.{Quest4SInvalidRequestException, Quest4SParseException}
+import de.iwelt.quest4s.exception.{ Quest4SInvalidRequestException, Quest4SParseException }
 import de.iwelt.quest4s.util.UrlHelper
 import io.circe.Error
 import io.circe.generic.AutoDerivation
 import sttp.client3.circe.SttpCirceApi
-import sttp.client3.{SttpBackend, _}
+import sttp.client3.{ SttpBackend, _ }
 import sttp.model.Method
 
 import java.io
 import scala.concurrent.duration.Duration
-import scala.concurrent.{Await, Future}
+import scala.concurrent.{ Await, Future }
 
 case class QuestDbClient(host: String, backend: SttpBackend[Future, _], username: String = "", password: String = "")
     extends UrlHelper

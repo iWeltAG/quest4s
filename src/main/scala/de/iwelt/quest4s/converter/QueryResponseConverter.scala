@@ -1,5 +1,5 @@
 package de.iwelt.quest4s.converter
-import de.iwelt.quest4s.model.{Explain, SelectResponse, Timing}
+import de.iwelt.quest4s.model.{ Explain, SelectResponse, Timing }
 import org.joda.time.DateTime
 
 object QueryResponseConverter {
