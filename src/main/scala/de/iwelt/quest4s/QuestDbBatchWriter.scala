@@ -9,7 +9,7 @@ import org.joda.time.DateTime
 import java.util.Date
 import scala.collection.mutable
 import scala.collection.mutable.ArrayBuffer
-import scala.concurrent.duration.{DurationInt, FiniteDuration}
+import scala.concurrent.duration.{ DurationInt, FiniteDuration }
 
 case class QuestDbBatchWriter(questDbClient: QuestDbClient, batchSize: Int, writeInterval: FiniteDuration, actorSystemOption: Option[ActorSystem] = None) {
 

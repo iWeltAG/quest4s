@@ -1,7 +1,7 @@
 package de.iwelt.quest4s.converter
 
 import io.circe.Decoder.Result
-import io.circe.{Decoder, Encoder, HCursor, Json}
+import io.circe.{ Decoder, Encoder, HCursor, Json }
 import org.joda.time.DateTime
 
 import java.util.Date
@@ -32,7 +32,6 @@ trait CirceSchema {
       Decoder.decodeJson.map(a => decodeFromJson(a)).apply(c)
     }
   }
-
 
   def encodeMapStringAny(a: Map[String, Any]): Json = {
     Json.obj(
