@@ -5,6 +5,28 @@
 = {book-title}
 (C) {revyear} {business}.
 
+== Quick Start
+Detailed Documentation will follow soon.
+
+```sbt
+libraryDependencies += "de.iwelt" %% "quest4s" % "0.6.0"
+libraryDependencies += "com.softwaremill.sttp.client3" %% "akka-http-backend" % "3.8.3"
+libraryDependencies += "com.softwaremill.sttp.client3" %% "okhttp-backend"    % "3.8.3"
+```
+
+```scala
+lazy val questDbClient: QuestDbClient = QuestDbClient("http://localhost:9000", AkkaHttpBackend())
+
+val file              = File("src/test/resources/import-test.csv")
+questDbClient.importCsv(table, file)
+
+val sqlQuery = s"Select * from YOUR_TABLE WHERE instrument = 'AAPL' and side = 'C';"
+val exportedFile     = questDbClient.exportCsv(sqlQuery)
+
+val executionResult = questDbClient.executeSql(sqlQuery)
+
+```
+
 == Changelog
 https://github.com/iWeltAG/quest4s/blob/main/CHANGELOG.md[CHANGELOG.md]
 
