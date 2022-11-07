@@ -1,6 +1,8 @@
 package de.iwelt.quest4s
 
 import better.files.File
+import com.typesafe.config
+import com.typesafe.config.ConfigFactory
 import de.iwelt.quest4s.converter.CirceSchema
 import de.iwelt.quest4s.exception.{ Quest4SInvalidRequestException, Quest4SParseException }
 import de.iwelt.quest4s.util.UrlHelper
@@ -60,7 +62,11 @@ case class QuestDbClient(host: String, backend: SttpBackend[Future, _], username
       .response(asFile(File.temporaryFile(suffix = ".csv").get().toJava))
   }
 
-  def executeSql(sql: String, maxWaitDuration: Duration, additionalParameters: Map[String, Any] = Map()): Map[String, Any] = {
+  def executeSql(
+      sql: String,
+      maxWaitDuration: Duration = QuestDbClient.defaultMaxWaitTime,
+      additionalParameters: Map[String, Any] = Map()
+  ): Map[String, Any] = {
     val resultFuture   = backend.send(executeSqlRequest(sql, additionalParameters))
     val responseResult = Await.result(resultFuture, maxWaitDuration)
     responseResult.body.getOrElse(
@@ -73,7 +79,12 @@ case class QuestDbClient(host: String, backend: SttpBackend[Future, _], username
     )
   }
 
-  def importCsv(tableName: String, file: File, maxWaitDuration: Duration, additionalParameters: Map[String, Any] = Map()): Map[String, Any] = {
+  def importCsv(
+      tableName: String,
+      file: File,
+      maxWaitDuration: Duration = QuestDbClient.defaultMaxWaitTime,
+      additionalParameters: Map[String, Any] = Map()
+  ): Map[String, Any] = {
     // case class could not be used at this moment because server sometime turn "table response" instead of json https://github.com/questdb/questdb/issues/2703
     val resultFuture   = backend.send(importCsvRequest(tableName, file, additionalParameters))
     val responseResult = Await.result(resultFuture, maxWaitDuration)
@@ -87,7 +98,7 @@ case class QuestDbClient(host: String, backend: SttpBackend[Future, _], username
     )
   }
 
-  def exportCsv(query: String, maxWaitDuration: Duration, limit: Option[String] = None): File = {
+  def exportCsv(query: String, maxWaitDuration: Duration = QuestDbClient.defaultMaxWaitTime, limit: Option[String] = None): File = {
     val resultFuture   = backend.send(exportCsvRequest(query, limit))
     val responseResult = Await.result(resultFuture, maxWaitDuration)
     val javaFile = responseResult.body.getOrElse(
@@ -96,4 +107,11 @@ case class QuestDbClient(host: String, backend: SttpBackend[Future, _], username
     File(javaFile.toURI)
   }
 
+}
+
+object QuestDbClient {
+  lazy val defaultMaxWaitTime: Duration = {
+    val conf: config.Config = ConfigFactory.load()
+    Duration.fromNanos(conf.getDuration("de.iwelt.quest4s.wait.time.max").toNanos)
+  }
 }
