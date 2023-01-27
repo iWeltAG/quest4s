@@ -9,14 +9,14 @@ libraryDependencies += "io.mikael" % "urlbuilder" % "2.0.9"
 libraryDependencies += "com.github.pathikrit" %% "better-files" % "3.9.1"
 
 val circeVersion     = "0.14.3"
-val sttClientVersion = "3.8.2"
+val sttClientVersion = "3.8.9"
 
 libraryDependencies += "com.softwaremill.sttp.client3" %% "circe"         % sttClientVersion
 libraryDependencies += "io.circe"                      %% "circe-core"    % circeVersion
 libraryDependencies += "io.circe"                      %% "circe-generic" % circeVersion
 libraryDependencies += "io.circe"                      %% "circe-parser"  % circeVersion
 
-libraryDependencies += "joda-time" % "joda-time" % "2.12.1"
+libraryDependencies += "joda-time" % "joda-time" % "2.12.2"
 
 val AkkaVersion = "2.6.20" // 2.6.20 latest version under Apache 2.0
 
