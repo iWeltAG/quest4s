@@ -1,3 +1,10 @@
+### [0.6.1](https://github.com/iWeltAG/quest4s/compare/v0.6.0...v0.6.1) (2023-01-27)
+
+
+### Maintenance
+
+* **dependencies:** Update 7 Dependencies ([a9a40df](https://github.com/iWeltAG/quest4s/commit/a9a40df9faabea2a780a6878230e243922f4d4d9))
+
 ## [0.6.0](https://github.com/iWeltAG/quest4s/compare/v0.5.0...v0.6.0) (2022-11-07)
 
 
