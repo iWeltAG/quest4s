@@ -1,7 +1,7 @@
 {
   "name" : "quest4s",
   "organization" : "de.iwelt",
-  "version" : "0.7.",
+  "version" : "0.7.0",
   "description" : "",
   "directories" : {
     "doc" : "docs"
