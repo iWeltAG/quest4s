@@ -12,9 +12,9 @@ jobs:
   unit-test:
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
         java: [ '11', '17' ]
-        fail-fast: false
         questdb-version: ['latest','7.3', '7.0.0', '6.7','6.6','6.5']
     steps:
       - uses: actions/checkout@v3.0.0
