@@ -1,4 +1,16 @@
-### [0.6.1](https://github.com/iWeltAG/quest4s/compare/v0.6.0...v0.6.1) (2023-01-27)
+## [0.7.0](https://github.com/iWeltAG/quest4s/compare/v0.6.1...v0.7.0) (2023-08-24)
+
+
+### Features
+
+* removed akka und use pekko ([90da5d6](https://github.com/iWeltAG/quest4s/commit/90da5d60c23defbcecc2204930e7a689db6574e1))
+
+
+### Maintenance
+
+* 6 dependency updates for quest4s ([25180c2](https://github.com/iWeltAG/quest4s/commit/25180c2926cc1a853e952db224035bc7d947b93a))
+
+## [0.6.1](https://github.com/iWeltAG/quest4s/compare/v0.6.0...v0.6.1) (2023-01-27)
 
 
 ### Maintenance
