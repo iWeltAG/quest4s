@@ -1,7 +1,7 @@
 package de.iwelt.quest4s.okhttp
 
-import akka.actor.ActorSystem
 import de.iwelt.quest4s.{AbstractBatchWriterSuite, QuestDbBatchWriter, TestAdditions}
+import org.apache.pekko.actor.ActorSystem
 import org.joda.time.DateTime
 import sttp.client3.SttpBackend
 

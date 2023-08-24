@@ -1,15 +1,15 @@
 package de.iwelt.quest4s
 
-import akka.actor.ActorSystem
 import better.files.File
 import com.github.tototoshi.csv.CSVWriter
 import de.iwelt.quest4s.exception.Quest4SInitializationException
+import org.apache.pekko.actor.ActorSystem
 import org.joda.time.DateTime
 
 import java.util.Date
 import scala.collection.mutable
 import scala.collection.mutable.ArrayBuffer
-import scala.concurrent.duration.{ DurationInt, FiniteDuration }
+import scala.concurrent.duration.{DurationInt, FiniteDuration}
 
 case class QuestDbBatchWriter(questDbClient: QuestDbClient, batchSize: Int, writeInterval: FiniteDuration, actorSystemOption: Option[ActorSystem] = None) {
 

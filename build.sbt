@@ -9,7 +9,7 @@ libraryDependencies += "io.mikael" % "urlbuilder" % "2.0.9"
 libraryDependencies += "com.github.pathikrit" %% "better-files" % "3.9.1"
 
 val circeVersion     = "0.14.3"
-val sttClientVersion = "3.8.9"
+val sttClientVersion = "3.9.0"
 
 libraryDependencies += "com.softwaremill.sttp.client3" %% "circe"         % sttClientVersion
 libraryDependencies += "io.circe"                      %% "circe-core"    % circeVersion
@@ -18,12 +18,11 @@ libraryDependencies += "io.circe"                      %% "circe-parser"  % circ
 
 libraryDependencies += "joda-time" % "joda-time" % "2.12.2"
 
-val AkkaVersion = "2.6.20" // 2.6.20 latest version under Apache 2.0
+val PekkoVersion = "1.0.1"
+libraryDependencies += "org.apache.pekko" %% "pekko-slf4j"  % PekkoVersion
+libraryDependencies += "org.apache.pekko" %% "pekko-stream" % PekkoVersion
 
-libraryDependencies += "com.typesafe.akka" %% "akka-actor" % AkkaVersion % Provided
-
-libraryDependencies += "com.typesafe.akka" %% "akka-stream" % AkkaVersion % Test
-
+libraryDependencies += "com.softwaremill.sttp.client3" %% "pekko-http-backend" % sttClientVersion % Test
 libraryDependencies += "com.softwaremill.sttp.client3" %% "akka-http-backend" % sttClientVersion % Test
 libraryDependencies += "com.softwaremill.sttp.client3" %% "okhttp-backend"    % sttClientVersion % Test
 
