@@ -12,6 +12,7 @@ jobs:
   unit-test:
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
         java: [ '11', '17' ]
     steps:
@@ -21,5 +22,7 @@ jobs:
         with:
           distribution: 'corretto'
           java-version: ${{ matrix.java }}
+      - name: Start QuestDb latest
+        uses: QuadStingray/questdb-github-action@v1.0.0
       - name: Run tests
         run: sbt test
