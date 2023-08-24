@@ -15,7 +15,7 @@ jobs:
       fail-fast: false
       matrix:
         java: [ '11', '17' ]
-        questdb-version: ['latest','7.3', '7.0.0', '6.7','6.6','6.5']
+        questdb-version: ['7.0.0', '6.7','6.6','6.5']
     steps:
       - uses: actions/checkout@v3.0.0
       - name: Set up JDK ${{ matrix.Java }}
