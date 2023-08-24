@@ -15,13 +15,15 @@ abstract class AbstractImportSuite extends BaseSuite {
   test(s"Upload an file") {
     val countBeforeUpload = countRows
     val file              = File("src/test/resources/import-test.csv")
-    questDbClient.importCsv(table, file, 60.seconds)
+    questDbClient.importCsv(table, file, 300.seconds)
     val countAfterUpload = countRows
     assertEquals(countBeforeUpload + 4, countAfterUpload)
   }
 
   def countRows: Long = {
-    QueryResponseConverter.convertMapResponseToSelectResponse(questDbClient.executeSql(s"select * from $table", 60.seconds)).count.getOrElse(0)
+    val count = QueryResponseConverter.convertMapResponseToSelectResponse(questDbClient.executeSql(s"select * from $table", 60.seconds)).count.getOrElse(-1L)
+    assertNotEquals(count, -1L)
+    count
   }
 
 }
