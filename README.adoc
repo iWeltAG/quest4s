@@ -9,13 +9,15 @@
 Detailed Documentation will follow soon.
 
 ```sbt
-libraryDependencies += "de.iwelt" %% "quest4s" % "0.6.0"
-libraryDependencies += "com.softwaremill.sttp.client3" %% "akka-http-backend" % "3.8.3"
-libraryDependencies += "com.softwaremill.sttp.client3" %% "okhttp-backend"    % "3.8.3"
+val sttClientVersion = "3.9.0"
+libraryDependencies += "de.iwelt" %% "quest4s" % "0.7.0"
+libraryDependencies += "com.softwaremill.sttp.client3" %% "akka-http-backend" % sttClientVersion
+libraryDependencies += "com.softwaremill.sttp.client3" %% "okhttp-backend"    % sttClientVersion
+libraryDependencies += "com.softwaremill.sttp.client3" %% "pekko-http-backend" % sttClientVersion
 ```
 
 ```scala
-lazy val questDbClient: QuestDbClient = QuestDbClient("http://localhost:9000", AkkaHttpBackend())
+lazy val questDbClient: QuestDbClient = QuestDbClient("http://localhost:9000", PekkoHttpBackend())
 
 val file              = File("src/test/resources/import-test.csv")
 questDbClient.importCsv(table, file)
@@ -29,6 +31,14 @@ val executionResult = questDbClient.executeSql(sqlQuery)
 
 == Changelog
 https://github.com/iWeltAG/quest4s/blob/main/CHANGELOG.md[CHANGELOG.md]
+
+== Testing
+to run test locally you need to have docker installed and running
+
+```bash
+docker run --name questdb -p 9000:9000 -p 9009:9009 -p 8812:8812 -p 9003:9003  --detach questdb/questdb:latest;
+sbt clean test;
+```
 
 == Documentation
 TBA

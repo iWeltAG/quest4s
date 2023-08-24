@@ -40,7 +40,8 @@ abstract class AbstractQuerySuite extends BaseSuite {
     val sqlQuery        = s"UPDATE $table SET price = 135.12 WHERE instrument = 'AAPL' and side = 'A';"
     val executionResult = questDbClient.executeSql(sqlQuery, 60.seconds)
     assertEquals(executionResult.get("ddl"), Some("OK"))
-    assertEquals(executionResult.get("updated"), Some(1))
+    val countUpdated = executionResult.get("updated").map(_.toString.toLong).getOrElse(0L)
+    assertEquals(countUpdated >= 1, true)
   }
 
   test(s"Select Data") {

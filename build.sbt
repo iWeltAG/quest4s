@@ -20,10 +20,16 @@ libraryDependencies += "joda-time" % "joda-time" % "2.12.5"
 
 val PekkoVersion = "1.0.1"
 libraryDependencies += "org.apache.pekko" %% "pekko-slf4j"  % PekkoVersion % Provided
-libraryDependencies += "org.apache.pekko" %% "pekko-stream" % PekkoVersion % Test
+
+Test / parallelExecution := false
 
 libraryDependencies += "com.softwaremill.sttp.client3" %% "pekko-http-backend" % sttClientVersion % Test
 libraryDependencies += "com.softwaremill.sttp.client3" %% "akka-http-backend"  % sttClientVersion % Test
 libraryDependencies += "com.softwaremill.sttp.client3" %% "okhttp-backend"     % sttClientVersion % Test
+
+libraryDependencies += "org.apache.pekko" %% "pekko-stream" % PekkoVersion % Test
+
+val AkkaVersion = "2.6.21" // 2.6.XX latest version under Apache 2.0
+libraryDependencies += "com.typesafe.akka" %% "akka-stream" % AkkaVersion % Test
 
 libraryDependencies += "org.scalameta" %% "munit" % "0.7.29" % Test
