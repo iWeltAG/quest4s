@@ -14,7 +14,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        java: [ '11', '17' ]
+        java: [ '11', '17', '21' ]
+        questdb-version: ['7.3.10', '7.0.0', '6.7','6.6','6.5']
     steps:
       - uses: actions/checkout@v3.0.0
       - name: Set up JDK ${{ matrix.Java }}
@@ -22,7 +23,9 @@ jobs:
         with:
           distribution: 'corretto'
           java-version: ${{ matrix.java }}
-      - name: Start QuestDb latest
+      - name: Start QuestDb ${{ matrix.mongodb-version }}
         uses: QuadStingray/questdb-github-action@v1.0.0
+        with:
+          questdb-version: ${{ matrix.questdb-version }}
       - name: Run tests
         run: sbt test
