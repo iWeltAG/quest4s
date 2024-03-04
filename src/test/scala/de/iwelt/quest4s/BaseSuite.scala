@@ -6,6 +6,10 @@ import scala.concurrent.Future
 import scala.concurrent.duration.DurationInt
 
 abstract class BaseSuite extends FunSuite {
+  protected def waitForQuestDbExecution(): Unit = {
+    Thread.sleep(1000)
+  }
+
   val backend: SttpBackend[Future, _]
 
   lazy val questDbClient: QuestDbClient = QuestDbClient("http://localhost:9000", backend)
@@ -27,11 +31,13 @@ abstract class BaseSuite extends FunSuite {
 
     val executionResultML = questDbClient.executeSql(sqlQueryML, 60.seconds)
     assertEquals(executionResultML.get("ddl"), Some("OK"))
+    waitForQuestDbExecution()
   }
 
   override def afterAll(): Unit = {
     val sqlQuery        = s"DROP TABLE '$table';"
     val executionResult = questDbClient.executeSql(sqlQuery, 60.seconds)
     assertEquals(executionResult.get("ddl"), Some("OK"))
+    waitForQuestDbExecution()
   }
 }
