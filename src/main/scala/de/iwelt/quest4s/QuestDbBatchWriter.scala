@@ -33,30 +33,35 @@ case class QuestDbBatchWriter(questDbClient: QuestDbClient, batchSize: Int, writ
         val tableName    = element._1
         collectionBuffer.remove(tableName)
         val f      = File.temporaryFile(suffix = ".csv").get()
-        val writer = CSVWriter.open(f.toJava)
-        val keys   = recordBuffer.flatMap(_.keySet).distinct.sorted.toList
-        writer.writeRow(keys)
-        recordBuffer.foreach(record => {
-          val list: List[Any] = keys.map(key => {
-            val value: Any = if (record.get(key) != null && record.contains(key)) {
-              record(key) match {
-                case dateTime: DateTime =>
-                  dateTime.toInstant.toString()
-                case date: Date =>
-                  new DateTime(date).toInstant.toString()
-                case any: Any => any
+        f.deleteOnExit()
+        try {
+          val writer = CSVWriter.open(f.toJava)
+          val keys   = recordBuffer.flatMap(_.keySet).distinct.sorted.toList
+          writer.writeRow(keys)
+          recordBuffer.foreach(record => {
+            val list: List[Any] = keys.map(key => {
+              val value: Any = if (record.get(key) != null && record.contains(key)) {
+                record(key) match {
+                  case dateTime: DateTime =>
+                    dateTime.toInstant.toString()
+                  case date: Date =>
+                    new DateTime(date).toInstant.toString()
+                  case any: Any => any
+                }
               }
-            }
-            else {
-              ""
-            }
-            value
+              else {
+                ""
+              }
+              value
+            })
+            writer.writeRow(list)
           })
-          writer.writeRow(list)
-        })
-        writer.flush()
-        writer.close()
-        questDbClient.importCsv(tableName, f, 60.seconds)
+          writer.flush()
+          writer.close()
+          questDbClient.importCsv(tableName, f, 60.seconds)
+        } finally {
+          f.delete()
+        }
       }
     }
   }

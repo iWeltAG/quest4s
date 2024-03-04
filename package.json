@@ -1,7 +1,7 @@
 {
   "name" : "quest4s",
   "organization" : "de.iwelt",
-  "version" : "0.7.1.snapshot",
+  "version" : "0.7.1",
   "description" : "",
   "directories" : {
     "doc" : "docs"
@@ -22,7 +22,6 @@
   },
   "homepage" : "https://github.com/iWeltAG/quest4s#readme",
   "devDependencies" : {
-    "vitepress" : "^1.0.0-alpha.2",
-    "@openapitools/openapi-generator-cli" : "^2.4.26"
+    "vitepress" : "^1.0.0-alpha.2"
   }
 }

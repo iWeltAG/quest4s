@@ -10,7 +10,6 @@ import sttp.client3.pekkohttp.PekkoHttpBackend
 import scala.concurrent.Future
 
 object TestAdditions {
-  lazy val akkaHttpBackend: SttpBackend[Future, AkkaStreams with capabilities.WebSockets]   = AkkaHttpBackend()
   lazy val pekkoHttpBackend: SttpBackend[Future, PekkoStreams with capabilities.WebSockets] = PekkoHttpBackend()
   lazy val okHttpBackend: SttpBackend[Future, capabilities.WebSockets]                      = OkHttpFutureBackend()
 }

@@ -17,6 +17,7 @@ abstract class AbstractBatchWriterSuite extends BaseSuite {
     val sqlQuery        = s"CREATE TABLE IF NOT EXISTS $secondTable(date TIMESTAMP, message String, target String) timestamp(date) PARTITION BY DAY"
     val executionResult = questDbClient.executeSql(sqlQuery, 60.seconds)
     assertEquals(executionResult.get("ddl"), Some("OK"))
+    waitForQuestDbExecution()
   }
 
   override def afterAll(): Unit = {
@@ -24,10 +25,12 @@ abstract class AbstractBatchWriterSuite extends BaseSuite {
     val sqlQuery        = s"DROP TABLE '$secondTable';"
     val executionResult = questDbClient.executeSql(sqlQuery, 60.seconds)
     assertEquals(executionResult.get("ddl"), Some("OK"))
+    waitForQuestDbExecution()
   }
 
   override def beforeEach(context: BeforeEach): Unit = {
     batchWriter.flush(true)
+    waitForQuestDbExecution()
   }
 
   test("Insert Data by individual Global Batch Writer") {
@@ -41,6 +44,7 @@ abstract class AbstractBatchWriterSuite extends BaseSuite {
       batchWriter.addRecord(secondTable, baseMap)
     })
 
+    Thread.sleep(1.seconds.toMillis)
     assertEquals(batchWriter.countCurrentRecords, 30L)
     assertEquals(countRows(secondTable), countRowsStartSecondTable)
     assertEquals(countRows(table), countRowsStartTable)
@@ -55,7 +59,7 @@ abstract class AbstractBatchWriterSuite extends BaseSuite {
       )
       batchWriter.addRecord(table, baseMap)
     })
-
+    Thread.sleep(1.seconds.toMillis)
     assertEquals(batchWriter.countCurrentRecords, 10L)
     assertEquals(countRows(secondTable), countRowsStartSecondTable + 30)
     assertEquals(countRows(table), countRowsStartTable + 20)

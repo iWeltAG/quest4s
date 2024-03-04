@@ -35,7 +35,7 @@ class OkHttpBatchWriterSuite extends AbstractBatchWriterSuite {
       }
       QuestDbBatchWriter.addRecord(secondTable, baseMap)
     })
-
+    waitForQuestDbExecution()
     assertEquals(QuestDbBatchWriter.countCurrentRecords, 30L)
     assertEquals(countRows(secondTable), countRowsStartSecondTable)
     assertEquals(countRows(table), countRowsStartTable)
@@ -50,7 +50,6 @@ class OkHttpBatchWriterSuite extends AbstractBatchWriterSuite {
       )
       QuestDbBatchWriter.addRecord(table, baseMap)
     })
-
     assertEquals(QuestDbBatchWriter.countCurrentRecords, 35L)
     assertEquals(countRows(secondTable), countRowsStartSecondTable)
     assertEquals(countRows(table), countRowsStartTable)
