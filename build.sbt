@@ -1,3 +1,4 @@
+
 scalaVersion := "2.13.13"
 
 libraryDependencies += "com.typesafe.scala-logging" %% "scala-logging" % "3.9.5"
@@ -32,3 +33,7 @@ libraryDependencies += "com.softwaremill.sttp.client3" %% "okhttp-backend"     %
 libraryDependencies += "org.apache.pekko" %% "pekko-stream" % PekkoVersion % Test
 
 libraryDependencies += "org.scalameta" %% "munit" % "0.7.29" % Test
+
+jsonFiles += (baseDirectory.value / "package.json")
+
+releaseVersionBump := sbtrelease.Version.Bump.NextStable

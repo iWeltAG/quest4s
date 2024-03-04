@@ -22,6 +22,6 @@
   },
   "homepage" : "https://github.com/iWeltAG/quest4s#readme",
   "devDependencies" : {
-    "vitepress" : "^1.0.0-alpha.2",
+    "vitepress" : "^1.0.0-alpha.2"
   }
 }

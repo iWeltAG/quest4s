@@ -10,25 +10,6 @@ val gitAddAllTask = ReleaseStep(action = st => {
   st
 })
 
-val generateChangeLog = ReleaseStep(action = st => {
-  st.log.warn("start generating changelog")
-  val response = "conventional-changelog -p conventionalcommits -i CHANGELOG.md -s -r 0 -n ./changelog/config.js".!!
-  st.log.warn("Output of conventional-changelog: " + response)
-  st
-})
-
-val addGithubRelease = ReleaseStep(action = st => {
-  st.log.warn("start github release process")
-  var response = ""
-  try response = "conventional-github-releaser -p conventionalcommits -r 3 -n ./changelog/config.js".!!
-  catch {
-    case e: Exception =>
-      st.log.warn("Catched Exception on generate release notes: " + e.getMessage)
-  }
-  st.log.warn("Output of conventional-github-releaser: " + response)
-  st
-})
-
 val setToMyNextVersion = ReleaseStep(action = st => {
   setMyVersion(st.get(versions).get._2, st)
   st
@@ -71,7 +52,6 @@ releaseProcess := {
     inquireVersions,
     runClean,
     setToMyReleaseVersion,
-    generateChangeLog,
     releaseStepCommand("scalafmt"),
     gitAddAllTask,
     commitReleaseVersion,
@@ -82,8 +62,7 @@ releaseProcess := {
     gitAddAllTask,
     commitNextVersion,
     pushChanges,
-    publishArtifacts,
-    addGithubRelease
+    publishArtifacts
   )
 }
 
