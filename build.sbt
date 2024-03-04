@@ -21,6 +21,8 @@ libraryDependencies += "joda-time" % "joda-time" % "2.12.7"
 val PekkoVersion = "1.0.2"
 libraryDependencies += "org.apache.pekko" %% "pekko-slf4j"  % PekkoVersion % Provided
 
+parallelExecution := false
+
 Test / parallelExecution := false
 
 libraryDependencies += "com.softwaremill.sttp.client3" %% "pekko-http-backend" % sttClientVersion % Test
