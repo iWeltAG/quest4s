@@ -32,7 +32,7 @@ case class QuestDbBatchWriter(questDbClient: QuestDbClient, batchSize: Int, writ
         val recordBuffer = element._2
         val tableName    = element._1
         collectionBuffer.remove(tableName)
-        val f      = File.temporaryFile(suffix = ".csv").get()
+        val f = File.temporaryFile(suffix = ".csv").get()
         f.deleteOnExit()
         try {
           val writer = CSVWriter.open(f.toJava)
@@ -59,9 +59,9 @@ case class QuestDbBatchWriter(questDbClient: QuestDbClient, batchSize: Int, writ
           writer.flush()
           writer.close()
           questDbClient.importCsv(tableName, f, 60.seconds)
-        } finally {
-          f.delete()
         }
+        finally
+          f.delete()
       }
     }
   }
